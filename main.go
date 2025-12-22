@@ -23,6 +23,13 @@ func main() {
 		})
 	})
 
+	e.GET("/trigger", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]string{
+			"status":  "triggerEndpoint",
+			"message": "trigger!!!",
+		})
+	})
+
 	// สำคัญ: Cloud Run จะกำหนด Port ผ่าน Environment Variable ชื่อ PORT
 	port := os.Getenv("PORT")
 	if port == "" {
