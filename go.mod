@@ -1,4 +1,4 @@
-module my-go-api
+module github.com/ThakdanaiDL/goAPI
 
 go 1.24.4
 
