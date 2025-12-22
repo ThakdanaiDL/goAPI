@@ -39,6 +39,10 @@ func main() {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ส่งเข้า Discord แล้ว!"})
 	})
 
+	e.GET("/", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Welcome to My Go API on Render!")
+	})
+
 	// สำคัญ: Cloud Run จะกำหนด Port ผ่าน Environment Variable ชื่อ PORT
 	port := os.Getenv("PORT")
 	if port == "" {
