@@ -49,13 +49,9 @@ func main() {
 	e.Logger.Fatal(e.Start(":" + port))
 }
 
-// อย่าลืม import "bytes" และ "encoding/json" นะครับ
-
 func sendDiscordNotify(message string) error {
-	// แนะนำให้ใช้ os.Getenv("DISCORD_WEBHOOK_URL") เพื่อความปลอดภัย
-	webhookURL := "https://discordapp.com/api/webhooks/1452582113042763809/EBlk05Ydp8WRxjS-X8j0PQ1G_6At-voEiDxoyU92eki2Z1hQdYfUBdrZvW5wDEOB-DAv"
+	webhookURL := os.Getenv("DISCORD_WEBHOOK_URL") //แนะนำให้ใช้ เพื่อความปลอดภัย
 
-	// โครงสร้าง JSON ที่ Discord ต้องการ
 	payload := map[string]string{
 		"content": message,
 	}
