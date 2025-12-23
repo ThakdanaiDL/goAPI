@@ -46,7 +46,7 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	//read all
+	//read allกดกกด
 	e.GET("/history", func(c echo.Context) error {
 		var logs []MessageLog
 		db.Find(&logs)
