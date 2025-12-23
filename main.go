@@ -163,7 +163,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/ThakdanaiDL/goAPI/config"
@@ -191,12 +190,12 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	routes.RegisterRoutes(e, ctrl)
+	routes.Register(e, ctrl)
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	log.Fatal(e.Start(":" + port))
+	e.Logger.Fatal(e.Start(":" + port))
 }

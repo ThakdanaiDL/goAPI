@@ -12,6 +12,7 @@ type MessageRepository interface {
 	Create(log models.MessageLog) error
 	Update(log models.MessageLog) error
 	Delete(log models.MessageLog) error
+	DeleteAll() error
 }
 
 type messageRepo struct {
@@ -42,4 +43,8 @@ func (r *messageRepo) Update(log models.MessageLog) error {
 
 func (r *messageRepo) Delete(log models.MessageLog) error {
 	return r.db.Delete(&log).Error
+}
+
+func (r *messageRepo) DeleteAll() error {
+	return r.db.Exec("DELETE FROM message_logs").Error
 }
