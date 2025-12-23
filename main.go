@@ -46,7 +46,7 @@ func main() {
 	//read all
 	e.GET("/history", func(c echo.Context) error {
 		var logs []MessageLog
-		db.Order("id desc").Find(&logs)
+		db.Find(&logs)
 		return c.JSON(http.StatusOK, logs)
 	})
 
