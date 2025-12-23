@@ -163,6 +163,7 @@
 package main
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/ThakdanaiDL/goAPI/config"
@@ -186,6 +187,22 @@ func main() {
 	ctrl := controller.NewMessageController(svc)
 
 	e := echo.New()
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"https://godash.onrender.com"},
+		AllowMethods: []string{
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodDelete,
+			http.MethodOptions, // แนะนำให้ใส่
+		},
+		AllowHeaders: []string{
+			"Content-Type",
+			"Authorization",
+		},
+		AllowCredentials: true, // ไม่จำเป็นก็ได้ แต่ถ้าคุณมี cookie หรือ credential ให้เปิด
+	}))
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
