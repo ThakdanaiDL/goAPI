@@ -11,7 +11,14 @@ import (
 func ConnectDatabase() *gorm.DB {
 	dsn := os.Getenv("DATABASE_URL")
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	dialector := postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true, // ⭐ สำคัญที่สุด
+	})
+
+	var err error
+
+	db, err := gorm.Open(dialector, &gorm.Config{
 		PrepareStmt: false,
 	})
 	if err != nil {
