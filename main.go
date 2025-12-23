@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -35,23 +36,59 @@ func main() {
 
 	e := echo.New()
 
-	// 4. API สำหรับดูข้อมูลทั้งหมด (Read)
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	//read all
 	e.GET("/history", func(c echo.Context) error {
 		var logs []MessageLog
-		db.Find(&logs)
+		db.Order("id desc").Find(&logs)
 		return c.JSON(http.StatusOK, logs)
 	})
 
-	// // Middleware
-	// e.Use(middleware.Logger())
-	// e.Use(middleware.Recover())
+	// 2. UPDATE - แก้ไขข้อความตาม ID
+	// วิธีเรียก: /update?id=1&msg=ข้อความใหม่
+	e.GET("/update", func(c echo.Context) error {
+		id := c.QueryParam("id")
+		newMsg := c.QueryParam("msg")
 
-	// Health Check Route
-	e.GET("/health", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, map[string]string{
-			"status":  "UP",
-			"message": "Echo API is running on Cloud Run!",
+		var log MessageLog
+		if err := db.First(&log, id).Error; err != nil {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "ไม่พบ ID นี้"})
+		}
+
+		log.Content = newMsg
+		db.Save(&log) // บันทึกการแก้ไข
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "อัปเดตเรียบร้อย",
+			"data":    log,
 		})
+	})
+
+	// 3. DELETE - ลบข้อมูลตาม ID
+	// วิธีเรียก: /delete?id=1
+	e.GET("/delete", func(c echo.Context) error {
+		id := c.QueryParam("id")
+
+		// ค้นหาดูก่อนว่ามีไหม
+		var log MessageLog
+		if err := db.First(&log, id).Error; err != nil {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "ไม่พบข้อมูลที่ต้องการลบ"})
+		}
+
+		// ลบข้อมูล (GORM จะทำ Soft Delete ถ้ามี gorm.Model)
+		db.Delete(&log)
+
+		return c.JSON(http.StatusOK, map[string]string{"status": "ลบ ID " + id + " เรียบร้อยแล้ว"})
+	})
+
+	// 4. DELETE ALL - ล้างฐานข้อมูล (Option)
+	e.GET("/delete-all", func(c echo.Context) error {
+		// ลบทุกอย่างในตาราง
+		db.Exec("DELETE FROM message_logs")
+		return c.JSON(http.StatusOK, map[string]string{"status": "ล้างข้อมูลทั้งหมดแล้ว"})
 	})
 
 	e.GET("/send", func(c echo.Context) error {
@@ -68,6 +105,13 @@ func main() {
 		db.Create(&MessageLog{Content: msg, Status: "Sent"})
 
 		return c.JSON(http.StatusOK, map[string]string{"status": "ส่งเข้า Discord แล้ว!"})
+	})
+
+	e.GET("/health", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]string{
+			"status":  "UP",
+			"message": "Echo API is running on Cloud Run!",
+		})
 	})
 
 	e.GET("/", func(c echo.Context) error {
