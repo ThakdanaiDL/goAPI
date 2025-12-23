@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -36,12 +37,12 @@ func main() {
 	e := echo.New()
 
 	// Middleware
-	// e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-	// 	AllowOrigins: []string{"*"}, // หรือใส่ URL เฉพาะของหน้าเว็บคุณเพื่อความปลอดภัย
-	// 	AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
-	// }))
-	// e.Use(middleware.Logger())
-	// e.Use(middleware.Recover())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"}, // หรือใส่ URL เฉพาะของหน้าเว็บคุณเพื่อความปลอดภัย
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
+	}))
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
 	//read all
 	e.GET("/history", func(c echo.Context) error {
