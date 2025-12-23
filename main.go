@@ -27,7 +27,9 @@ func main() {
 
 	dsn := os.Getenv("DATABASE_URL")
 	var err error
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+		PrepareStmt: false,
+	})
 	if err != nil {
 		log.Fatal("Failed to connect to database")
 	}
@@ -45,19 +47,9 @@ func main() {
 	e.Use(middleware.Recover())
 
 	//read all
-	// e.GET("/history", func(c echo.Context) error {
-	// 	var logs []MessageLog
-	// 	db.Find(&logs)
-	// 	return c.JSON(http.StatusOK, logs)
-	// })
-
 	e.GET("/history", func(c echo.Context) error {
-		logs := make([]MessageLog, 0)
-		// ค้นหาข้อมูล
-		if err := db.Order("id desc").Find(&logs).Error; err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
-		}
-
+		var logs []MessageLog
+		db.Find(&logs)
 		return c.JSON(http.StatusOK, logs)
 	})
 
