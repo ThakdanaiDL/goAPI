@@ -204,6 +204,13 @@ func main() {
 		AllowCredentials: true, // ไม่จำเป็นก็ได้ แต่ถ้าคุณมี cookie หรือ credential ให้เปิด
 	}))
 
+	e.HEAD("/", func(c echo.Context) error {
+		return c.NoContent(200)
+	})
+	e.HEAD("/health", func(c echo.Context) error {
+		return c.NoContent(200)
+	})
+
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
