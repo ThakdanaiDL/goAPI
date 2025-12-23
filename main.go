@@ -40,6 +40,11 @@ func main() {
 	e := echo.New()
 
 	// Middleware
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"}, // หรือใส่ URL เฉพาะของหน้าเว็บคุณเพื่อความปลอดภัย
+		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
+	}))
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
