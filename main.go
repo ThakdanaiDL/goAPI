@@ -11,8 +11,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"fmt"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -35,7 +33,6 @@ func main() {
 	}
 	// 3. สั่งให้สร้าง Table อัตโนมัติ (Auto Migrate)
 	db.AutoMigrate(&MessageLog{})
-	fmt.Println("----------------------------")
 
 	e := echo.New()
 
@@ -44,8 +41,8 @@ func main() {
 		AllowOrigins: []string{"*"}, // หรือใส่ URL เฉพาะของหน้าเว็บคุณเพื่อความปลอดภัย
 		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
 	}))
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	// e.Use(middleware.Logger())
+	// e.Use(middleware.Recover())
 
 	//read all
 	e.GET("/history", func(c echo.Context) error {
