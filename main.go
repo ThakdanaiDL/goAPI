@@ -11,6 +11,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	"fmt"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -33,6 +35,7 @@ func main() {
 	}
 	// 3. สั่งให้สร้าง Table อัตโนมัติ (Auto Migrate)
 	db.AutoMigrate(&MessageLog{})
+	fmt.Println("----------------------------")
 
 	e := echo.New()
 
@@ -62,7 +65,7 @@ func main() {
 		db.Save(&log) // บันทึกการแก้ไข
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "อัปเดตเรียบร้อย",
+			"message": "อัปเดตเรียบร้อย!",
 			"data":    log,
 		})
 	})
