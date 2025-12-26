@@ -26,3 +26,26 @@ func Register(e *echo.Echo, ctrl *controller.MessageController) {
 	e.GET("/delete-all", ctrl.DeleteAll)
 	e.GET("/send", ctrl.Send)
 }
+
+func UserRegister(e *echo.Echo, ctrl *controller.UserController) {
+
+	// // default page
+	// e.GET("/", func(c echo.Context) error {
+	// 	return c.String(200, "Welcome to My Go API on Render!")
+	// })
+
+	// e.GET("/health", func(c echo.Context) error {
+	// 	return c.JSON(200, echo.Map{
+	// 		"status":  "UP",
+	// 		"message": "Echo API is running",
+	// 	})
+	// })
+
+	e.GET("/Userhistory", ctrl.GetAll)
+	e.GET("/Userupdate", ctrl.Update)
+	e.GET("/Userdelete", ctrl.Delete)
+	e.GET("/Userdelete-all", ctrl.DeleteAll)
+	e.GET("/Usersend", ctrl.Send)
+	e.GET("/mathmaking", ctrl.MakeTeam)
+
+}

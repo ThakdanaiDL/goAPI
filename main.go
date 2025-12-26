@@ -180,11 +180,15 @@ import (
 func main() {
 
 	db := config.ConnectDatabase()
-	db.AutoMigrate(&models.MessageLog{})
+	db.AutoMigrate(&models.MessageLog{}, &models.UserData{})
 
 	repo := repository.NewMessageRepository(db)
 	svc := service.NewMessageService(repo)
 	ctrl := controller.NewMessageController(svc)
+
+	User_repo := repository.NewUserRepository(db)
+	User_svc := service.NewUserService(User_repo)
+	User_ctrl := controller.NewUserController(User_svc)
 
 	e := echo.New()
 
@@ -216,10 +220,12 @@ func main() {
 
 	routes.Register(e, ctrl)
 
+	routes.UserRegister(e, User_ctrl)
+
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "8089"
 	}
 
-	e.Logger.Fatal(e.Start(":" + port))
+	e.Logger.Fatal(e.Start("172.16.110.125:" + port))
 }

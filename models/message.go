@@ -9,3 +9,10 @@ type MessageLog struct {
 	Content string `json:"content"`
 	Status  string `json:"status"`
 }
+
+type UserData struct {
+	gorm.Model
+	Name    string `json:"name"`
+	Winrate string `json:"winrate"`
+	Rank    string `json:"rank"`
+}
