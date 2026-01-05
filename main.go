@@ -227,5 +227,5 @@ func main() {
 		port = "8089"
 	}
 
-	e.Logger.Fatal(e.Start("172.16.110.125:" + port))
+	e.Logger.Fatal(e.Start(":" + port))
 }

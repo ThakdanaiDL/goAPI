@@ -1,8 +1,6 @@
 package model
 
-import (
-	"gorm.io/gorm"
-)
+import "gorm.io/gorm"
 
 type MessageLog struct {
 	gorm.Model
@@ -12,7 +10,15 @@ type MessageLog struct {
 
 type UserData struct {
 	gorm.Model
-	Name    string `json:"name"`
-	Winrate string `json:"winrate"`
-	Rank    string `json:"rank"`
+	Name           string `json:"name"`
+	Rank           string `json:"rank"`
+	TotalGames     int    `json:"totalGame"  gorm:"default:0"`
+	CurrentCourtID *int   `json:"currentCourtId"`
+	LastPartnerID  *uint  `json:"lastPartnerId"`
+}
+
+type UserSummary struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+	Rank string `json:"rank"`
 }

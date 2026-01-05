@@ -1,0 +1,11 @@
+| Endpoint                    | ใช้ทำอะไร             |
+| --------------------------- | --------------------- |
+| `GET /users`                | ดูผู้เล่นทั้งหมด      |
+| `POST /user/add?name=A`     | เพิ่มผู้เล่น          |
+| `PUT /user?id=1&winrate=60` | แก้ข้อมูล             |
+| `GET /match/next?round=1`   | 🔥 จัดเกมรอบถัดไป     |
+| `GET /closest4`             | (legacy) winrate ล้วน |
+
+e.POST("/match/preview", ctrl.MatchPreview)
+e.POST("/match/confirm", ctrl.MatchConfirm)
+e.POST("/round/reset", ctrl.ResetRound)
